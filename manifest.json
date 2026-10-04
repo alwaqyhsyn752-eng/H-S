@@ -1,1 +1,22 @@
-{"name":"pot-awlq","short_name":"pot-awlq","lang":"ar","dir":"rtl","start_url":"./index.html","scope":"./","display":"standalone","background_color":"#04060c","theme_color":"#4de6ff","icons":[]}
+{
+  "name": "pot-awlq — فكرتك لبناء المستقبل",
+  "short_name": "pot-awlq",
+  "description": "منصة تعلم برمجي عربية تفاعلية تعمل بلا إنترنت: محرر أكواد بتدقيق لحظي، محاكي تنفيذ، مخططات، ومساعد Git",
+  "lang": "ar",
+  "dir": "rtl",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#04060c",
+  "theme_color": "#4de6ff",
+  "categories": ["education", "productivity", "developer"],
+  "icons": [
+    {
+      "src": "icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
