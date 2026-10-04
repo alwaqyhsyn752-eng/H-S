@@ -244,3 +244,144 @@ if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",
 </script>
 </body>
 </html>
+<script>
+(function(){
+  const addKB=()=>{
+    const ed=document.getElementById("code");
+    const bar=document.getElementById("tbar");
+    if(!ed||!bar)return;
+
+    const rows=[
+      ["Tab","⇥","  "],
+      ["(","(",""],
+      [")",")",""],
+      ["{","{",""],
+      ["}","}",""],
+      ["[","[",""],
+      ["]","]",""],
+      [";",";",""],
+      [":",":",""],
+      [",",",",""],
+      [".",".",""],
+      ["=","=",""],
+      ["+","+",""],
+      ["-","-",""],
+      ["*","*",""],
+      ["/","/",""],
+      ["<","<",""],
+      [">",">",""],
+      ["&","&",""],
+      ["|","|",""],
+      ["!","!",""],
+      ["?","?",""],
+      ["\"",'"',""],
+      ["'","'",""],
+      ["`","`",""],
+      ["_","_",""],
+      ["#","#",""],
+      ["@","@",""],
+      ["$","$",""],
+      ["%","%",""],
+      ["^","^",""],
+      ["~","~",""],
+      ["\\","\\",""],
+      ["Enter","↵","\n"]
+    ];
+
+    const kb=document.createElement("div");
+    kb.className="code-keyboard";
+    kb.innerHTML=rows.map(([name,label,ins])=>
+      `<button class="ckb-btn" data-ins="${ins.replace(/"/g,"&quot;").replace(/\n/g,"\\n")}">${label}</button>`
+    ).join("");
+
+    const style=document.createElement("style");
+    style.textContent=`
+      .code-keyboard{
+        display:flex;flex-wrap:wrap;gap:4px;padding:8px;
+        border-top:1px solid var(--ln);
+        background:linear-gradient(180deg,rgba(4,6,12,.95),rgba(11,17,32,.98));
+        max-height:190px;overflow-y:auto;
+        position:relative;z-index:10;
+        border-bottom-left-radius:12px;
+        border-bottom-right-radius:12px;
+      }
+      .code-keyboard::-webkit-scrollbar{width:6px}
+      .code-keyboard::-webkit-scrollbar-thumb{background:rgba(77,230,255,.3);border-radius:99px}
+      .ckb-btn{
+        flex:0 0 auto;
+        min-width:40px;height:34px;
+        padding:0 10px;
+        border-radius:7px;
+        border:1px solid rgba(77,230,255,.35);
+        background:linear-gradient(180deg,rgba(14,22,40,.95),rgba(11,17,32,.95));
+        color:var(--c);
+        font-family:Consolas,monospace;
+        font-size:14px;font-weight:700;
+        cursor:pointer;
+        transition:.15s;
+        box-shadow:0 2px 4px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.05);
+      }
+      .ckb-btn:hover,.ckb-btn:active{
+        background:linear-gradient(180deg,rgba(77,230,255,.25),rgba(77,230,255,.1));
+        border-color:var(--c);
+        box-shadow:0 0 12px rgba(77,230,255,.6);
+        transform:scale(.96);
+      }
+      .ckb-toggle{
+        position:absolute;top:-34px;right:12px;
+        padding:5px 12px;
+        border-radius:8px 8px 0 0;
+        border:1px solid rgba(77,230,255,.4);
+        border-bottom:0;
+        background:rgba(11,17,32,.95);
+        color:var(--c);
+        font-size:11px;font-weight:700;
+        cursor:pointer;
+      }
+      .ckb-hidden .ckb-body{display:none}
+      .ckb-hidden{max-height:0!important;padding:0!important;overflow:hidden}
+    `;
+    document.head.appendChild(style);
+
+    const wrapper=document.createElement("div");
+    wrapper.innerHTML=kb.innerHTML;
+    wrapper.className="code-keyboard";
+
+    const toggle=document.createElement("button");
+    toggle.className="ckb-toggle";
+    toggle.textContent="⌨ لوحة الرموز ▲";
+    let collapsed=false;
+    toggle.onclick=()=>{
+      collapsed=!collapsed;
+      wrapper.classList.toggle("ckb-hidden",collapsed);
+      toggle.textContent=collapsed?"⌨ لوحة الرموز ▼":"⌨ لوحة الرموز ▲";
+    };
+    wrapper.appendChild(toggle);
+
+    bar.parentNode.insertBefore(wrapper,bar.nextSibling);
+
+    wrapper.addEventListener("click",e=>{
+      const b=e.target.closest(".ckb-btn");
+      if(!b)return;
+      let ins=b.dataset.ins;
+      if(ins==="\\n")ins="\n";
+      const s=ed.selectionStart;
+      const en=ed.selectionEnd;
+      ed.value=ed.value.slice(0,s)+ins+ed.value.slice(en);
+      ed.selectionStart=ed.selectionEnd=s+ins.length;
+      ed.focus();
+      ed.dispatchEvent(new Event("input"));
+      if(window.Snd&&window.Snd.click)window.Snd.click();
+    });
+  };
+
+  if(document.readyState==="loading")
+    document.addEventListener("DOMContentLoaded",()=>setTimeout(addKB,500));
+  else setTimeout(addKB,500);
+
+  // إعادة الإضافة عند التنقل
+  setInterval(()=>{
+    if(!document.querySelector(".code-keyboard"))addKB();
+  },2000);
+})();
+</script>
